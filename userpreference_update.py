@@ -64,7 +64,6 @@ def trackTopNaccuracy(InputPythonJson):
         top_json = json.load(f)
         top_json = json.dumps(top_json,ensure_ascii = False)
         top_json = ast.literal_eval(top_json)
-        print(top_json)
         if top_json == {}:
             top_json['1'] = {
                 "top1":1 if historyList[-1]['place']==1 else 0,
@@ -80,7 +79,6 @@ def trackTopNaccuracy(InputPythonJson):
                 "top10":1 if historyList[-1]['place']<=10 else 0,
                 "top20":1 if historyList[-1]['place']<=20 else 0
             }
-            print(historyList[-1])
         with open(f"./TopNaccuracy/TopNaccuracy.json", 'w', encoding='utf-8') as make_file:
                 json.dump(top_json, make_file, indent="\t",ensure_ascii = False)
                

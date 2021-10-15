@@ -18,14 +18,22 @@ def generateUserPreferenceVector(InputPythonJson):
             vector_json = json.dumps(vector_json,ensure_ascii = False)
             vector_json = ast.literal_eval(vector_json)
             vector = np.array(vector_json[str(likeList[i])])
-            base_vectors.append(vector)
+            vector_ = {}
+            vector_['vector'] = vector
+            vector_['rating'] = InputPythonJson['like']['like'][i]['rating']
+            base_vectors.append(vector_)
     return base_vectors
 
 
 def return_max_similarity(base_vectors,recipe_vector):
     max_ = 0
     for i in base_vectors:
-        max_ = max(max_,calculate_similarity_vectors(i, recipe_vector))
+        alpha = 0
+        if i['rating'] >= 4:
+            alpha += 0.15
+        if i['rating'] == 5:
+            alpha += 0.1
+        max_ = max(max_,calculate_similarity_vectors(i['vector'], recipe_vector) + alpha)
     return max_
 
 
