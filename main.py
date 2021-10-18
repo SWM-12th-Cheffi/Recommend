@@ -10,10 +10,12 @@ app = Flask(__name__)
 def send_recommended_json():
     InputPythonJson = request.get_json()
     return_recipe_id = get_recommend_by_userVector(InputPythonJson)
+    res = []
     for recipe_ in return_recipe_id:
         del recipe_['similarity']
-
-    return jsonify({"output_json":return_recipe_id}),200
+    for element_dict in return_recipe_id:
+        res.append(element_dict['id'])
+    return str(res),200
 ################ input example
 
 
