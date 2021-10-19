@@ -31,7 +31,7 @@ def return_max_similarity(base_vectors,recipe_vector):
         alpha = 0
         if i['rating'] >= 4:
             alpha += 0.15
-        if i['rating'] == 5:
+        if i['rating'] >= 5:
             alpha += 0.1
         max_ = max(max_,calculate_similarity_vectors(i['vector'], recipe_vector) + alpha)
     return max_

@@ -23,8 +23,8 @@ def send_recommended_json():
 @app.route("/userpreference_update",methods=["POST","GET"]) # 유저가 추천된 레시피 고르고 레이팅을 하던 안하던 레시피에서 나가고 나서 실행 고려중  
 def send_userpreference_json():
     InputPythonJson = request.get_json()
-    outputJson = UpdateUserPreferrence(InputPythonJson)
     trackTopNaccuracy(InputPythonJson)
+    outputJson = UpdateUserPreferrence(InputPythonJson)
     return json.dumps({"output_json":outputJson}),200
 
 
