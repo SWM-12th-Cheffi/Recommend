@@ -24,7 +24,10 @@ def UpdateUserPreferrence(InputPythonJson):
                 vector_json = returnVectorJson(like_id)
                 likevector = np.array(vector_json[str(like_id)])
                 if calculate_similarity_vectors(likevector,hatevector) > 0.85:
-                    likeList.remove(likerecipe)
+                    if calculate_similarity_vectors(likevector,hatevector) > 0.95 and int(likerecipe['rating'])-int(recipebefore['rating']) >= 2:
+                        likerecipe['rating'] = abs(int(likerecipe['rating'])+int(recipebefore['rating']))//2
+                    else:
+                        likeList.remove(likerecipe)
         if recipebefore['rating'] == None or int(recipebefore['rating']) >= 4:
             recipe_like_id = recipebefore['id']
             replace = False
@@ -46,6 +49,22 @@ def UpdateUserPreferrence(InputPythonJson):
                         likeList.append(recipebefore)
                 if done == False:
                     likeList.append(recipebefore)
+    
+    length_ = len(historyList)
+    for i in range(length_-1):
+        for j in range(i+1,length_):
+            ca = np.array(returnVectorJson(historyList[i]['id'])[str(historyList[i]['id'])])
+            cb = np.array(returnVectorJson(historyList[j]['id'])[str(historyList[j]['id'])])
+            if calculate_similarity_vectors(ca,cb) > 0.93:
+                historyList.remove(historyList[j])
+    length_ = len(historyList)            
+    if length_ > 100:
+        for reduce_iter in range(length_ - 100):
+            if historyList[reduce_iter] not in scrapList:
+                historyList.remove(historyList[reduce_iter])
+
+
+
     outputJson = {
         "id":InputPythonJson['id'],
         "like":{
