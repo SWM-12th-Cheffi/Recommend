@@ -64,7 +64,6 @@ def UpdateUserPreferrence(InputPythonJson):
                 historyList.remove(historyList[reduce_iter])
 
 
-
     outputJson = {
         "id":InputPythonJson['id'],
         "like":{
