@@ -21,6 +21,7 @@ def generateUserPreferenceVector(InputPythonJson):
             vector_ = {}
             vector_['vector'] = vector
             vector_['rating'] = InputPythonJson['like']['like'][i]['rating']
+
             base_vectors.append(vector_)
     return base_vectors
 
@@ -33,6 +34,7 @@ def return_max_similarity(base_vectors,recipe_vector):
             alpha += 0.15
         if i['rating'] >= 5:
             alpha += 0.1
+        #print(i,calculate_similarity_vectors(i['vector'], recipe_vector) + alpha)
         max_ = max(max_,calculate_similarity_vectors(i['vector'], recipe_vector) + alpha)
     return max_
 
@@ -51,6 +53,14 @@ def get_recommend_by_userVector(InputPythonJson,top=60):
         sort_element = {}
         sort_element['id']=recipe_id
         sort_element['similarity']=return_max_similarity(base_vectors,vector)
+
+        with open(f'./amountOfIngre/{recipe_id}__.json',"r") as f1:
+            amountjson = json.load(f1)
+            amountjson = json.dumps(amountjson,ensure_ascii = False)
+            amountjson = ast.literal_eval(amountjson)
+        if amountjson[str(recipe_id)] <= 2:
+            sort_element['similarity'] -= 0.8
+        #print(sort_element)
         sort_list.append(sort_element)
     sort_list = sorted(sort_list,key=lambda x:x['similarity'],reverse=True)
     return sort_list
