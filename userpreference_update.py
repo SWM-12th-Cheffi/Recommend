@@ -96,8 +96,8 @@ def UpdateUserPreferrence(InputPythonJson):
     
     length_ = len(historyList)
     if length_ > 5:
-        for i in range(length_-1):
-            for j in range(i+1,length_):
+        for i in range(0,length_-1):
+            for j in range(i+1,length_-1):
                 ca = np.array(returnVectorJson(historyList[i]['id'])[str(historyList[i]['id'])])
                 cb = np.array(returnVectorJson(historyList[j]['id'])[str(historyList[j]['id'])])
                 if calculate_similarity_vectors(ca,cb) > 0.93:
