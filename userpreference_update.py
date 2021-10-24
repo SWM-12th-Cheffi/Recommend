@@ -95,13 +95,19 @@ def UpdateUserPreferrence(InputPythonJson):
                     likeList.append(recipebefore)
     
     length_ = len(historyList)
+    has_to_remove = []
     if length_ > 5:
         for i in range(0,length_-1):
-            for j in range(i+1,length_-1):
+            for j in range(i+1,length_):
                 ca = np.array(returnVectorJson(historyList[i]['id'])[str(historyList[i]['id'])])
                 cb = np.array(returnVectorJson(historyList[j]['id'])[str(historyList[j]['id'])])
-                if calculate_similarity_vectors(ca,cb) > 0.93:
-                    historyList.remove(historyList[j])
+                if calculate_similarity_vectors(ca,cb) > 0.95:
+                    has_to_remove.append(historyList[j])
+        print(has_to_remove)
+        if len(has_to_remove) > 0:
+            for element in has_to_remove:
+                if element in historyList:
+                    historyList.remove(element)
     length_ = len(historyList)            
     if length_ > 100:
         for reduce_iter in range(length_ - 100):
