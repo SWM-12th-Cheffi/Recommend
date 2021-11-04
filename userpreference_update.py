@@ -2,7 +2,7 @@ import json
 import ast
 import numpy as np
 from calculate_similarity_vectors import calculate_similarity_vectors
-
+from read_from_cf_json import read_from_cf
 
 def trackTopNaccuracy(InputPythonJson):
     print("here")
@@ -56,6 +56,20 @@ def UpdateUserPreferrence(InputPythonJson):
     likeList = InputPythonJson['like']['like']
     historyList = InputPythonJson['like']['history']
     scrapList = InputPythonJson['like']['scrap']
+    #
+    likeList_id = []
+    for i in likeList:
+        likeList_id.append(i['id'])
+    person_id = None
+    if len(likeList_id) >= 10:
+        json_ = read_from_cf()
+        max_ = json_['max_']
+        for k,v in json_.items():
+            if v == list(map(lambda x: str(x),likeList_id)):
+                person_id = k
+    #
+
+
     for recipebefore in historyList:
         if "id" not in recipebefore:
             continue
@@ -119,6 +133,24 @@ def UpdateUserPreferrence(InputPythonJson):
             if historyList[reduce_iter] not in scrapList:
                 historyList.remove(historyList[reduce_iter])
 
+
+    #
+    json_ =  read_from_cf()
+    likeList_id = []
+    print(person_id)
+    for i in likeList:
+        likeList_id.append(i['id'])
+    if person_id != None and len(likeList) >= 10:
+        json_[person_id] = list(map(lambda x: str(x),likeList_id))
+    elif person_id != None and len(likeList) < 10:
+        del json_[person_id]
+    elif person_id == None and len(likeList) >= 10:
+        json_['max_'] += 1
+        json_[json_['max_']] = list(map(lambda x: str(x),likeList_id))
+        print(json_)
+    with open(f'CF/cf.json', 'w', encoding='utf-8') as make_file:
+        json.dump(json_, make_file, indent="\t",ensure_ascii = False)
+    #
 
     outputJson = {
         "id":InputPythonJson['id'],

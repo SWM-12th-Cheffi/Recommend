@@ -3,13 +3,24 @@ import ast
 import numpy as np
 from scipy import spatial
 from calculate_similarity_vectors import calculate_similarity_vectors
+from read_from_cf_json import read_from_cf 
 
 def generateUserPreferenceVector(InputPythonJson):
     likeList = InputPythonJson['like']['like']
     likeList = [x["id"] for x in likeList]
     likeList = list(filter(lambda x : x!= None,likeList))
     likeList = list(map(lambda x : str(x),likeList))
-    #######
+    #
+    with open('./recipe_vector/5389.json',"r") as f:
+        vector_json = json.load(f)
+        vector_json = json.dumps(vector_json,ensure_ascii = False)
+        vector_json = ast.literal_eval(vector_json)
+        vector_dim = np.array(vector_json['5389']).shape[0]
+    #
+
+    #
+    base_vector = np.zeros(vector_dim)
+    #
     base_vectors = []
     size = len(likeList)
     for i in range(size):
@@ -21,8 +32,41 @@ def generateUserPreferenceVector(InputPythonJson):
             vector_ = {}
             vector_['vector'] = vector
             vector_['rating'] = InputPythonJson['like']['like'][i]['rating']
-
+            #
+            base_vector += vector
+            #
             base_vectors.append(vector_)
+
+
+    #
+    json_ = read_from_cf()
+
+    if len(likeList) >= 10:
+        for k,v in json_.items():
+            if k == 'max_':
+                continue
+            else:
+                sum_ = np.zeros(vector_dim)
+                for i in v:
+                    with open(f'./recipe_vector/{i}.json',"r") as f:
+                        vector_json = json.load(f)
+                        vector_json = json.dumps(vector_json,ensure_ascii = False)
+                        vector_json = ast.literal_eval(vector_json)
+                        #vector = np.array(str(vector_json[i]))
+                        vector = np.array(vector_json[str(i)])
+                        sum_ += vector
+                if calculate_similarity_vectors(sum_, base_vector) > 0.8:
+                    for element in v:
+                        vector_ = {}
+                        with open(f'./recipe_vector/{element}.json',"r") as f:
+                            vector_json = json.load(f)
+                            vector_json = json.dumps(vector_json,ensure_ascii = False)
+                            vector_json = ast.literal_eval(vector_json)
+                            vector = np.array(vector_json[str(element)])
+                            vector_['vector'] = vector
+                            vector_['rating'] = 3
+                            base_vectors.append(vector_)
+    #
     return base_vectors
 
 
