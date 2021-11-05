@@ -22,8 +22,8 @@ def trackTopNaccuracy(InputPythonJson):
                 
                         top_json[str(iter_)] = {
                             "top1":1 if historyList[i]['place']==0 else 0,
-                            "top10":1 if historyList[i]['place']<=9 else 0,
-                            "top25":1 if historyList[i]['place']<=24 else 0
+                            "top6":1 if historyList[i]['place']<=5 else 0,
+                            "top12":1 if historyList[i]['place']<=11 else 0
                         }
                         iter_+=1
             else:
@@ -35,8 +35,8 @@ def trackTopNaccuracy(InputPythonJson):
                     if historyList[i]['rating'] == int(historyList[i]['rating']):
                         top_json[str(max_+1)] = {
                             "top1":1 if historyList[i]['place']==0 else 0,
-                            "top10":1 if historyList[i]['place']<=9 else 0,
-                            "top25":1 if historyList[i]['place']<=24 else 0
+                            "top6":1 if historyList[i]['place']<=5 else 0,
+                            "top12":1 if historyList[i]['place']<=11 else 0
                         }
                         max_ += 1
             with open(f"./TopNaccuracy/TopNaccuracy.json", 'w', encoding='utf-8') as make_file:
