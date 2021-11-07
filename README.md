@@ -32,7 +32,7 @@ recommendation_with_update_using_flask
 
 # recommendation_api.py
 - input:{
-    id: int
+    id: int,
     like:{
         history:[
             {
@@ -75,9 +75,9 @@ recommendation_with_update_using_flask
 
 
 # userpreference_update.py
-- 
-input: {
-    id: int
+- input: ;;;
+{
+    id: int,
     like:{
         history:[
             {
@@ -102,9 +102,9 @@ input: {
         ]
     }
 }
-
+;;;
 - output: {
-    id: int
+    id: int,
     like:{
         history:[
             {
