@@ -32,7 +32,7 @@ recommendation_with_update_using_flask
 
 # recommendation_api.py
 - input:
-;;;
+```json
 {
     id: int,
     like:{
@@ -59,7 +59,7 @@ recommendation_with_update_using_flask
         ]
     }
 }
-;;;
+```
 - output:[int]
 
 - 사용자가 만들 수 있는 레시피번호(input.id)와 취향을 나타내는 정보(input.like.like)를 바탕으로 사용자의 취향을 벡터로 정의하고 
@@ -78,7 +78,7 @@ recommendation_with_update_using_flask
 
 # userpreference_update.py
 - input: 
-;;;
+```json
 {
     id: int,
     like:{
@@ -105,7 +105,8 @@ recommendation_with_update_using_flask
         ]
     }
 }
-;;;
+```
+```json
 - output: {
     id: int,
     like:{
@@ -132,6 +133,7 @@ recommendation_with_update_using_flask
         ]
     }
 }
+```
 - input.like.history를 활용하여 input.like.like 갱신
 - input.like.history를 활용하여 TopNaccuracy/TopNaccuracy.json 갱신
 - input.like.like를 활용하여 CF/cf.json을 갱신
