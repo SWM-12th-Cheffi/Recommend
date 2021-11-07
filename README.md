@@ -63,7 +63,7 @@ recommendation_with_update_using_flask
 - output:[int]
 
 - 사용자가 만들 수 있는 레시피번호(input.id)와 취향을 나타내는 정보(input.like.like)를 바탕으로 사용자의 취향을 벡터로 정의하고 
-타 비슷한 취향의 유저와 비교하여 타 유저의 취향까지 고려. cosine similarity로 레시피들을 유사도 기준으로 sort
+타 비슷한 취향의 유저와 비교하여 타 유저가 좋아하는 레시피를 사용자또한 좋아한다고 간주. cosine similarity로 레시피들을 유사도 기준으로 sort
 
 # CF
 - 내부 cf.json에 사용자데이터 저장
@@ -106,8 +106,9 @@ recommendation_with_update_using_flask
     }
 }
 ```
+- output: 
 ```json
-- output: {
+{
     id: int,
     like:{
         history:[
